@@ -1,0 +1,29 @@
+name: .NET Build and Test
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore GenericsTests/GenericsTests.sln
+      
+    - name: Build
+      run: dotnet build GenericsTests/GenericsTests.sln --no-restore
+      
+    - name: Test
+      run: dotnet test GenericsTests/GenericsTests.sln --no-build --verbosity normal
+
